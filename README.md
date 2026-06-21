@@ -21,6 +21,8 @@ monolithic service, then made sure the imports are correct.
 ### Database connectivity
 I copied the application.properties across too as it contains datasource fields.
 
+By default, SQL database initialization is only performed when using an embedded in-memory database. To always initialize an SQL database, irrespective of its type, set `spring.sql.init.mode` to `always`.
+
 
 
 ## Code
