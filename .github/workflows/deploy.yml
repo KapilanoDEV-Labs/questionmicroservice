@@ -51,6 +51,6 @@ jobs:
           docker stop question-container || true
           docker rm question-container || true
           
-          # Spin up the fresh container on Host Port 8080 mapping cleanly to internal 8080
-          docker run -d --name question-container -p 8080:8080 --restart always ${{ secrets.DOCKERHUB_USERNAME }}/question-service:latest
+          # Spin up the fresh container on Host Port 8082 mapping cleanly to internal 8080
+          docker run -d --name question-container -p 8082:8080 --restart always ${{ secrets.DOCKERHUB_USERNAME }}/question-service:latest
         EOF
