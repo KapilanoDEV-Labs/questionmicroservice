@@ -18,6 +18,20 @@ I copied from the monolithic application then made the necessary changes
 to make this independent from the quiz service and have it's own DB.
 This is a MS running under https://github.com/KapilanoDEV-Labs/
 
+I had to change the repo URL 
+
+```text
+amitkapila@Amits-iMac question-service % git remote -v
+origin  https://github.com/KapilanoDEV/questionmicroservice.git (fetch)
+origin  https://github.com/KapilanoDEV/questionmicroservice.git (push)
+amitkapila@Amits-iMac question-service % 
+amitkapila@Amits-iMac question-service % git remote set-url origin https://github.com/KapilanoDEV-Labs/questionmicroservice.git
+amitkapila@Amits-iMac question-service % git remote -v                                                                         
+origin  https://github.com/KapilanoDEV-Labs/questionmicroservice.git (fetch)
+origin  https://github.com/KapilanoDEV-Labs/questionmicroservice.git (push)
+amitkapila@Amits-iMac question-service %
+```
+
 ## Configuration
 
 After I went to https://start.spring.io Maven's pom.xml would look like this.
