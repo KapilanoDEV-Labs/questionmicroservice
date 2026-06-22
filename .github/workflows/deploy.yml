@@ -19,7 +19,6 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        cache: maven
 
     - name: Build Project JAR with Maven
       run: ./mvnw clean package -DskipTests
