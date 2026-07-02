@@ -1,6 +1,5 @@
-package com.telusko.questionservice.model;
+package com.telusko.questionservice.dto;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Data;
 

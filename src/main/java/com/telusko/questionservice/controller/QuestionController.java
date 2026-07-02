@@ -1,7 +1,7 @@
 package com.telusko.questionservice.controller;
 
 import com.telusko.questionservice.model.Question;
-import com.telusko.questionservice.model.QuestionWrapper;
+import com.telusko.questionservice.dto.QuestionWrapper;
 import com.telusko.questionservice.model.Response;
 import com.telusko.questionservice.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -66,6 +66,53 @@ needs them.
 We need generate questions, getQuestions(questionid) and getScore to be
 the responsibility of the Question service.
 
+## 🏗️ Architectural Transition: Breaking the Monolith
+
+In our old monolithic design, the `Quiz` and `Question` domains were tightly coupled. They shared the same database instance and the same runtime environment. When transitioning to a Microservices Architecture, we split them into independent deployments: **Quiz Service** and **Question Service**, each managing its own isolated database.
+
+This architectural shift directly required us to redesign how these components talk to each other. Below is the engineering reasoning behind the new methods introduced in the Question Microservice.
+
+---
+
+### 1. `getQuestionsForQuiz(String category, Integer numQuestions)`
+
+#### 🎯 Purpose:
+Returns a list of randomly selected question IDs matching a specific category and volume count.
+
+#### 💡 Architectural Reasoning:
+* **Database Isolation (Loose Coupling):** In a microservice ecosystem, the `Quiz Service` should **never** directly access the `Question` database tables. The Quiz Service only needs to know *what* quiz exists and *which* question IDs are inside it.
+* **Separation of Concerns:** Deciding which questions fit a specific category and randomly picking them is purely a feature of the question repository. The Quiz Service simply calls this endpoint to offload the question selection logic entirely.
+
+---
+
+### 2. `getQuestionsFromId(List<Integer> questionIds)`
+
+#### 🎯 Purpose:
+Accepts a collection of unique question IDs as an input array and returns a payload of `QuestionWrapper` Data Transfer Objects (DTOs).
+
+#### 💡 Architectural Reasoning:
+* **Network Payload Optimization:** A `QuestionWrapper` excludes the `rightAnswer` field. When a user is actively taking a quiz, we cannot expose the correct answers in the HTTP network response payload (which would allow users to look at the answers via browser developer tools).
+* **Data Hydration:** The Quiz Service stores only raw question IDs to remain lightweight. When a frontend client requests to load a quiz, the Quiz Service uses this endpoint to "hydrate" those IDs into actual readable text, options, and titles.
+
+---
+
+### 3. `getScore(List<Response> responses)`
+
+#### 🎯 Purpose:
+Accepts a list of user submissions (containing the question ID and the user's chosen answer) and calculates the total numeric score.
+
+#### 💡 Architectural Reasoning:
+* **Encapsulation of Secrets (Security):** The `rightAnswer` column lives strictly inside the Question Service's isolated database. To calculate a score, something has to compare the user's answer against the correct answer.
+* **Zero Leakage:** Instead of forcing the Question Service to send the correct answers over the network to the Quiz Service (which leaks data boundaries), the Quiz Service sends the user's responses *to* the Question Service. The Question Service evaluates the score internally where the data is safe, and returns only a single safe number (e.g., `5/10`).
+
+---
+
+## 📈 Benefits of this Design
+
+1. **True Independence:** The Quiz Service can now function completely without knowing how questions are stored, structured, or validated.
+2. **Scalability:** If the question database grows to millions of items, the Question Service can be scaled up independently without affecting the performance of the quiz engine.
+3. **Enhanced Security:** Correct answers never leave the boundary of the Question Service's secure database until grading is complete.
+
 ### Service Layer
 
 This code was initially taken from the monolithic QuizService.java file

@@ -2,9 +2,8 @@ package com.telusko.questionservice.service;
 
 import com.telusko.questionservice.dao.Questiondao;
 import com.telusko.questionservice.model.Question;
-import com.telusko.questionservice.model.QuestionWrapper;
+import com.telusko.questionservice.dto.QuestionWrapper;
 import com.telusko.questionservice.model.Response;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
